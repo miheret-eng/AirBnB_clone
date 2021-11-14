@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Interpreter module"""
 
 
 import cmd
-import shlex # to split string using shell-like syntax
+import shlex  # to split string using shell-like syntax
 import models
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage 
+from models.engine.file_storage import FileStorage
+
 
 class HBNBCommand(cmd.Cmd):
     """Class contains various AirBnB commands"""
@@ -50,7 +51,6 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
         key = "BaseModel." + args[1]
-        #file_inst = FileStorage()
         di_ct = models.storage.all()
         if key in di_ct:
             print(di_ct[key])
@@ -122,8 +122,5 @@ class HBNBCommand(cmd.Cmd):
         setattr(obj, args[2], args[3])
         obj.save()
 
-
-    
-
-if __name__ == '__main__': #cod should not be executed when imported
+if __name__ == '__main__':  # cod should not be executed when imported
     HBNBCommand().cmdloop()
