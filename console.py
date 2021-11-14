@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Interpreter module"""
 
-
+import os
 import cmd
 import shlex  # to split string using shell-like syntax
 import models
