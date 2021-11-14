@@ -3,6 +3,7 @@
 
 
 import cmd
+import shlex # to split string using shell-like syntax
 import models
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage 
@@ -25,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """Creates a new instance of BaseModel"""
-        args = line.split()
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -38,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints th string representation of an instance"""
-        args = line.split()
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -59,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         """Deletes instances based on the class name and id and save
         the changes into JSON File"""
-        args = line.split()
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -80,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line=None):
         """Prints all string representatoin of all instances"""
         if line is not None:
-            args = line.split()
+            args = shlex.split(line)
             if len(args) > 0:
                 if args[0] != "BaseModel":
                     print("** class doesn't exist **")
@@ -89,15 +90,13 @@ class HBNBCommand(cmd.Cmd):
         dict_list = []
         for key in di_ct:
             dict_list.append(str(di_ct[key]))
-        print("[", end="")
-        print(", ".join(dict_list), end="")
-        print("]")
+        print(dict_list)
 
     def do_update(self, line):
         """Updates the instances based on class name and Id by
         adding or updating the attributes
         """
-        args = line.split()
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -120,7 +119,8 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 4:
             print("** value missing **")
             return False
-        obj[args[2]] = args[3]
+        setattr(obj, args[2], args[3])
+        obj.save()
 
 
     
