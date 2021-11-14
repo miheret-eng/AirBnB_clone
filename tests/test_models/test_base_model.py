@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Test BaseModel Module"""
+
+import unittest
 import models
-from unittest import mock
 import time
+from unittest import mock
 from datetime import datetime
 BaseModel = models.base_model.BaseModel
-import unittest
 
 
 class TestBaseModel(unittest.TestCase):
