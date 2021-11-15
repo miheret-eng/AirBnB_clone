@@ -1,40 +1,40 @@
 #!/usr/bin/python3
-""" console """
+""" The console module """
 
 import cmd
-from datetime import datetime
 import models
-from models.amenity import Amenity
 from models.base_model import BaseModel
+from datetime import datetime
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-import shlex  # for splitting the line along spaces except in double quotes
+import shlex  # For shell like argument parsing
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class HBNBCommand(cmd.Cmd):
-    """ HBNH console """
+    """ Interpreter Class"""
     prompt = '(hbnb) '
 
     def do_EOF(self, arg):
-        """Exits console"""
+        """Exits console when met"""
         return True
 
     def emptyline(self):
-        """ overwriting the emptyline method """
+        """ Nothing happens when no argument is fed"""
         return False
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
 
-    def _key_value_parser(self, args):
-        """creates a dictionary from a list of strings"""
+    def kv_parser(self, args):
+        """Generates dictionary from string list"""
         new_dict = {}
         for arg in args:
             if "=" in arg:
@@ -55,13 +55,13 @@ class HBNBCommand(cmd.Cmd):
         return new_dict
 
     def do_create(self, arg):
-        """Creates a new instance of a class"""
-        args = arg.split()
+        """Creates a new class instance"""
+        args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
             return False
         if args[0] in classes:
-            new_dict = self._key_value_parser(args[1:])
+            new_dict = self.kv_parser(args[1:])
             instance = classes[args[0]](**new_dict)
         else:
             print("** class doesn't exist **")
@@ -69,9 +69,9 @@ class HBNBCommand(cmd.Cmd):
         print(instance.id)
         instance.save()
 
-    def do_show(self, arg):
+    def do_show(self, line):
         """Prints an instance as a string based on the class and id"""
-        args = shlex.split(arg)
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -105,9 +105,9 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_all(self, arg):
+    def do_all(self, line):
         """Prints string representations of instances"""
-        args = shlex.split(arg)
+        args = shlex.split(line)
         obj_list = []
         if len(args) == 0:
             obj_dict = models.storage.all()
@@ -119,9 +119,6 @@ class HBNBCommand(cmd.Cmd):
         for key in obj_dict:
             obj_list.append(str(obj_dict[key]))
         print(obj_list)
-        #print("[", end="")
-        #print(", ".join(obj_list), end="")
-        #print("]")
 
     def do_update(self, arg):
         """Update an instance based on the class name, id, attribute & value"""
